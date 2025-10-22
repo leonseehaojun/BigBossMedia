@@ -59,6 +59,7 @@ export default function Lightbox({
               playsInline
               preload="auto"
               poster={item.poster || "/poster.jpg"}
+              onLoadedMetadata={onLoadedMeta}  
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
             >
               <source src={item.src} type={item.mime || "video/mp4"} />
