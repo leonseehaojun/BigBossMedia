@@ -27,7 +27,7 @@ export default function Hero({ title, subtitle, cta }: Props) {
         <Reveal y={28} delay={0.12}>
           <div className="hero-media" aria-hidden="true">
             <img 
-              src="whiteLOGO.png" 
+              src="LOGO.jpg" 
               alt="Hero visual" 
               className="hero-image" 
             />

@@ -57,7 +57,7 @@ export default function App() {
           <h2>Let’s work together</h2>
           <p>
             We create concise, compelling visuals for brands and publishers.{" "}
-            Email <a href="mailto:hello@acmemedia.co">hello@acmemedia.co</a>
+            Email <a href="mailto:hello@acmemedia.co">admin@BigBossMedia.sg</a>
           </p>
         </section>
       </main>
