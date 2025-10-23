@@ -7,6 +7,7 @@ import media from "./data/media.ts";
 import StatsBand from "./components/StatsBand";
 import TeamSection from "./components/TeamSection";
 import ScrollyProcess from "./components/ScrollyProcess";
+import ContactForm from "./components/ContactForm";
 
 
 type Filter = "All" | "Photo" | "Video";
@@ -54,11 +55,12 @@ export default function App() {
         <ScrollyProcess />
 
         <section id="contact" className="section container">
-          <h2>Let’s work together</h2>
-          <p>
-            We create concise, compelling visuals for brands and publishers.{" "}
-            Email <a href="mailto:hello@acmemedia.co">admin@BigBossMedia.sg</a>
+          <h2 className="section-title">Let’s work together</h2>
+          <p className="mb-6">
+            We create concise, compelling visuals for brands and publishers.
+            Fill out the form below and we’ll get back to you shortly.
           </p>
+          <ContactForm />
         </section>
       </main>
       <Footer />
