@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     // 1️⃣ Send the message to the admin inbox
     await resend.emails.send({
       from: 'noreply@bigbossmedia.sg',
-      to: 'admin@bigbossmedia.sg',
+      to: 'leonsee1000@yahoo.com.sg',
       subject: `📬 New Contact Message from ${name}`,
       html: `
         <p><strong>From:</strong> ${name} (${email})</p>
