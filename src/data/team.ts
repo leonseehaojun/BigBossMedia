@@ -11,7 +11,7 @@ export type TeamMember = {
 const team: TeamMember[] = [
   { id: "t-1", name: "Zen Tay",  role: "Founder & Director",  photo: "/zen.jpeg" },
   { id: "t-2", name: "Valda Lim",  role: "Intern",            photo: "/team/maya.jpg" },
-  { id: "t-3", name: "Ferlyn",  role: "Intern",     photo: "/team/rio.jpg" },
+  { id: "t-3", name: "Ferlin",  role: "Intern",     photo: "/team/rio.jpg" },
 ];
 
 export default team;
