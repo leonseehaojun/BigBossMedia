@@ -1,50 +1,72 @@
-// /api/contact.js
-import { Resend } from 'resend';
+import "./loadEnv.js";
+import { Resend } from "resend";
 
-// Initialize the Resend API client with your API key (set this in Vercel > Environment Variables)
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend;
+const getResend = () => {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  if (!resend) {
+    resend = new Resend(key);
+  }
+  return resend;
+};
+
+const ADMIN_INBOX = process.env.CONTACT_RECIPIENT || "leonsee1000@yahoo.com.sg";
+const FROM_EMAIL = process.env.CONTACT_FROM || "noreply@bigbossmedia.sg";
+
+const validateEmail = (value) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value).toLowerCase());
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, message } = req.body;
+  const { name, email, message } = req.body || {};
 
   if (!name || !email || !message) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({ error: "Please provide a valid email address" });
+  }
+
+  const client = getResend();
+  if (!client) {
+    console.error("Missing RESEND_API_KEY environment variable");
+    return res.status(500).json({ error: "Email service is not configured" });
   }
 
   try {
-    // 1️⃣ Send the message to the admin inbox
-    await resend.emails.send({
-      from: 'noreply@bigbossmedia.sg',
-      to: 'leonsee1000@yahoo.com.sg',
+    await client.emails.send({
+      from: FROM_EMAIL,
+      to: ADMIN_INBOX,
       subject: `📬 New Contact Message from ${name}`,
       html: `
         <p><strong>From:</strong> ${name} (${email})</p>
         <p><strong>Message:</strong></p>
-        <p>${message}</p>
+        <p>${message.replace(/\n/g, "<br />")}</p>
       `,
     });
 
-    // 2️⃣ Send an auto-reply to the customer
-    await resend.emails.send({
-      from: 'noreply@bigbossmedia.sg',
+    await client.emails.send({
+      from: FROM_EMAIL,
       to: email,
-      subject: 'We received your message!',
+      subject: "We received your message!",
       html: `
         <p>Hi ${name},</p>
         <p>Thank you for reaching out to <strong>Big Boss Media</strong>.</p>
         <p>We’ve received your message and our team will get back to you soon.</p>
-        <br>
-        <p>— The Big Boss Media Team</p>
+        <p style="margin-top:24px;">— The Big Boss Media Team</p>
       `,
     });
 
-    return res.status(200).json({ success: true, message: 'Email sent successfully' });
+    return res.status(200).json({ success: true, message: "Email sent successfully" });
   } catch (error) {
-    console.error('Email send error:', error);
-    return res.status(500).json({ error: 'Failed to send message', details: error });
+    console.error("Email send error:", error);
+    const detail =
+      typeof error?.message === "string" ? error.message : "Failed to send message";
+    return res.status(500).json({ error: detail });
   }
 }
