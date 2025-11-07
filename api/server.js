@@ -4,7 +4,8 @@ import { parse } from "node:url";
 import { StringDecoder } from "node:string_decoder";
 import contactHandler from "./contact.js";
 
-const port = Number(process.env.PORT) || 8787;
+const rawPort = process.env.API_PORT ?? process.env.PORT ?? "8787";
+const port = Number.parseInt(rawPort, 10) || 8787;
 
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || "*")
   .split(",")

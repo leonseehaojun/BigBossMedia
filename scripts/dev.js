@@ -1,4 +1,50 @@
 import { spawn } from "node:child_process";
+import { createServer as createNetServer } from "node:net";
+
+const ensureAvailablePort = (startPort) =>
+  new Promise((resolve, reject) => {
+    const attempt = (port) => {
+      const tester = createNetServer();
+      tester.unref();
+
+      tester.once("error", (error) => {
+        try {
+          tester.close();
+        } catch {
+          // ignore close errors when server failed to start
+        }
+        if (error.code === "EADDRINUSE") {
+          attempt(port + 1);
+        } else {
+          reject(error);
+        }
+      });
+
+      tester.once("listening", () => {
+        tester.close(() => resolve(port));
+      });
+
+      tester.listen(port, "0.0.0.0");
+    };
+
+    attempt(startPort);
+  });
+
+const desiredPort = Number(process.env.API_PORT || process.env.PORT || 8787) || 8787;
+const apiPort = await ensureAvailablePort(desiredPort).catch((error) => {
+  console.error("Unable to find available port for API server", error);
+  process.exit(1);
+});
+
+process.env.API_PORT = String(apiPort);
+if (!process.env.PORT) {
+  process.env.PORT = String(apiPort);
+}
+
+if (apiPort !== desiredPort) {
+  console.log(`
+⚠️  Desired API port ${desiredPort} in use, switched to ${apiPort}.`);
+}
 
 const processes = [
   { name: "server", command: "npm", args: ["run", "dev:server"], color: "\x1b[95m" },
