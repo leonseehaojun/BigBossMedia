@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+
+type Feedback = { type: "success" | "error"; message: string } | null;
 
 export default function ContactForm() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading">("idle");
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+    setFeedback(null);
 
     try {
       const res = await fetch("/api/contact", {
@@ -19,80 +25,85 @@ export default function ContactForm() {
         body: JSON.stringify(form),
       });
 
-      if (res.ok) {
-        setStatus("success");
-        setForm({ name: "", email: "", message: "" });
-      } else {
-        setStatus("error");
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to send message");
       }
-    } catch {
-      setStatus("error");
+
+      setForm({ name: "", email: "", message: "" });
+      setFeedback({
+        type: "success",
+        message: data?.message || "We received your message and will respond soon.",
+      });
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to send message. Please try again later.";
+      setFeedback({ type: "error", message });
+    } finally {
+      setStatus("idle");
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white shadow-lg rounded-2xl p-8 border border-gray-100 mt-10">
-      <h3 className="text-2xl font-semibold text-gray-900 mb-2">Send Us a Message</h3>
-      <p className="text-gray-500 mb-6">
-        Please fill in the form below to get in touch with us.
-      </p>
+    <div className="contact-card">
+      <h3>Send us a message</h3>
+      <p>Tell us about your project and the impact you’d like to make.</p>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {/* Name & Email in one row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="contact-form">
+        <div className="contact-row">
+          <label className="contact-field">
+            <span>Name</span>
             <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Your Name"
-            required
-            className="border border-gray-300 rounded-md px-4 py-3 focus:ring-2 focus:ring-black focus:outline-none placeholder-gray-400"
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Your name"
+              autoComplete="name"
+              required
             />
+          </label>
+          <label className="contact-field">
+            <span>Email</span>
             <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Your Email"
-            required
-            className="border border-gray-300 rounded-md px-4 py-3 focus:ring-2 focus:ring-black focus:outline-none placeholder-gray-400"
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="you@email.com"
+              autoComplete="email"
+              required
             />
+          </label>
         </div>
 
-        {/* Message */}
-        <textarea
+        <label className="contact-field">
+          <span>What should we know?</span>
+          <textarea
             name="message"
             value={form.message}
             onChange={handleChange}
-            placeholder="Your Message"
+            placeholder="Share goals, timelines or references so we can prepare"
             rows={5}
             required
-            className="border border-gray-300 rounded-md px-4 py-3 focus:ring-2 focus:ring-black focus:outline-none placeholder-gray-400 resize-none"
-        ></textarea>
+          />
+        </label>
 
-        {/* Centered Submit button BELOW */}
-        <div className="flex justify-center mt-2">
-            <button
-            type="submit"
-            disabled={status === "loading"}
-            className="bg-black text-white font-semibold px-8 py-3 rounded-md hover:bg-gray-800 transition"
-            >
-            {status === "loading" ? "Sending..." : "Send Message"}
-            </button>
+        <button type="submit" disabled={status === "loading"} className="btn full">
+          {status === "loading" ? "Sending..." : "Send message"}
+        </button>
+
+        <div className="form-feedback" aria-live="polite" role="status">
+          {feedback ? (
+            <p className={feedback.type === "success" ? "is-success" : "is-error"}>
+              {feedback.message}
+            </p>
+          ) : null}
         </div>
-
-        {status === "success" && (
-            <p className="text-green-600 text-center mt-2">
-            ✅ Message sent successfully!
-            </p>
-        )}
-        {status === "error" && (
-            <p className="text-red-600 text-center mt-2">
-            ❌ Failed to send message. Please try again later.
-            </p>
-        )}
-        </form>
+      </form>
     </div>
   );
 }

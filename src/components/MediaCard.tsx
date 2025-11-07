@@ -16,32 +16,37 @@ export default function MediaCard({
   item: MediaItem;
   onOpen: () => void;
 }) {
-  if (item.type === "photo") {
-    return (
-      <button className="card" onClick={onOpen} aria-label={`Open photo: ${item.title}`}>
-        <img src={item.src} alt={item.alt || item.title} loading="lazy" decoding="async" />
-        <div className="card-meta">
-          <h3>{item.title}</h3>
-        </div>
-      </button>
-    );
-  }
+  const isVideo = item.type === "video";
 
-  // video card (autoplays inline; click still opens lightbox)
   return (
-    <div className="card" onClick={onOpen} role="button" aria-label={`Open video: ${item.title}`}>
-      <video
-        src={item.src}
-        poster={item.poster}
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{ width: "100%", height: "260px", objectFit: "cover" }}
-      />
+    <button
+      type="button"
+      className="card media-card"
+      onClick={onOpen}
+      aria-label={`Open ${isVideo ? "video" : "photo"}: ${item.title}`}
+    >
+      <div className="media-thumb">
+        {isVideo ? (
+          <video
+            src={item.src}
+            poster={item.poster}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+          />
+        ) : (
+          <img src={item.src} alt={item.alt || item.title} loading="lazy" decoding="async" />
+        )}
+        <span className={`media-badge ${isVideo ? "is-video" : "is-photo"}`}>
+          {isVideo ? "Video" : "Photo"}
+        </span>
+      </div>
       <div className="card-meta">
         <h3>{item.title}</h3>
+        {item.caption ? <p>{item.caption}</p> : null}
       </div>
-    </div>
+    </button>
   );
 }
