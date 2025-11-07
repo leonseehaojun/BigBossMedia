@@ -375,15 +375,33 @@ img {
 .grid > .grid-span {
   grid-column: span 4;
 }
+.grid > .span-6 {
+  grid-column: span 6;
+}
+
+.grid > .span-8 {
+  grid-column: span 8;
+}
 
 @media (max-width: 1100px) {
   .grid > .grid-span {
     grid-column: span 6;
   }
+  
+  .grid > .span-6,
+  .grid > .span-8 {
+    grid-column: span 12;
+  }
 }
+
 
 @media (max-width: 640px) {
   .grid > .grid-span {
+    grid-column: span 12;
+  }
+  
+  .grid > .span-6,
+  .grid > .span-8 {
     grid-column: span 12;
   }
 }
