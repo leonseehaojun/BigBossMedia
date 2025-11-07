@@ -2,7 +2,11 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <p>© {new Date().getFullYear()} Big Boss Media. All rights reserved.</p>
+        <div className="footer-copy">
+          <p className="footer-title">Big Boss Media</p>
+          <p className="footer-subtitle">Social-first production studio based in Singapore.</p>
+          <p className="footer-subtitle">© {new Date().getFullYear()} All rights reserved.</p>
+        </div>
         <div className="footer-links">
           <a
             href="https://www.instagram.com/bigbossmediabbm/?hl=en"
@@ -13,7 +17,7 @@ export default function Footer() {
             Instagram
           </a>
           <a
-            href="https://www.tiktok.com/@big.boss.media" 
+            href="https://www.tiktok.com/@big.boss.media"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
@@ -21,12 +25,10 @@ export default function Footer() {
             TikTok
           </a>
           <a
-            href="#"  // replace with real link if they have one
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
+            href="mailto:hello@bigbossmedia.sg"
+            aria-label="Email Big Boss Media"
           >
-            LinkedIn
+            Email us
           </a>
         </div>
       </div>
