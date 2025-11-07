@@ -11,11 +11,11 @@ const getResend = () => {
   return resend;
 };
 
-const ADMIN_INBOX = (process.env.CONTACT_RECIPIENT || "leonsee1000@yahoo.com.sg")
+const ADMIN_INBOX = (process.env.CONTACT_RECIPIENT || "leonsee1000@yahoo.com.sg, admin@bigbossmedia.sg")
   .split(",")
   .map((recipient) => recipient.trim())
   .filter(Boolean);
-const DEFAULT_FROM = "Big Boss Media <onboarding@resend.dev>";
+const DEFAULT_FROM = "Big Boss Media <noreply@bigbossmedia.sg>";
 const FROM_EMAIL = process.env.CONTACT_FROM?.trim() || DEFAULT_FROM;
 
 const escapeHtml = (value = "") =>
