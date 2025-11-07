@@ -702,12 +702,60 @@ img {
   background: linear-gradient(160deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.08));
 }
 
+
+.team-card--group {
+  background: var(--surface);
+}
+
+.team-group-content {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.team-photo-frame {
+  position: relative;
+  overflow: hidden;
+}
+
 .team-photo {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
+  height: 100%;
+}
+.team-group-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 24px;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0b0b0b;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  text-align: center;
 }
 
+@media (max-width: 900px) {
+  .team-group-content {
+    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .team-group-content {
+    grid-template-columns: 1fr;
+  }
+
+  .team-group-banner {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}
 .team-body {
   padding: 22px 24px 28px;
 }

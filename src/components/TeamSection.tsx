@@ -23,7 +23,19 @@ export default function TeamSection() {
               style={m.photoPosition ? { objectPosition: m.photoPosition } : undefined}
             />
           );
-
+          const mediaContent =
+            m.layout === "group" ? (
+              <div className="team-group-content">
+                <div className="team-photo-frame">{photo}</div>
+                <div className="team-group-banner" aria-hidden="true">
+                  <span>BIG</span>
+                  <span>BOSS</span>
+                  <span>MEDIA</span>
+                </div>
+              </div>
+            ) : (
+              photo
+            );
           return (
             <Reveal
               key={m.id}
@@ -32,11 +44,7 @@ export default function TeamSection() {
               className={`grid-span ${spanClass}`.trim()}
             >
               <article className={cardClass.join(" ")}>
-                {m.layout === "group" ? (
-                  <div className="team-photo-frame">{photo}</div>
-                ) : (
-                  photo
-                )}
+                {mediaContent}
                 <div className="team-body">
                   <span className="team-role">{m.role}</span>
                   <h3>{m.name}</h3>
