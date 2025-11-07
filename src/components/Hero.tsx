@@ -15,7 +15,7 @@ export default function Hero({ title, subtitle, cta }: Props) {
           <div className="hero-copy">
             <p className="hero-eyebrow">Social-first storytelling</p>
             <h1>
-              {title} <span className="text-gradient">that stops the scroll</span>
+              {title} <span className="text-gradient">Content Creation</span>
             </h1>
             {subtitle && <p className="hero-subtitle">{subtitle}</p>}
             <div className="hero-actions">
