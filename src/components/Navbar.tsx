@@ -6,7 +6,7 @@ export default function Navbar() {
           <img src="logoxbackground.png" alt="Big Boss Media logo" />
           <span className="brand-copy">
             <strong>Big Boss Media</strong>
-            <span>Content studio for ambitious brands</span>
+            <span>Content creation for ambitious brands</span>
           </span>
         </a>
 
