@@ -4,56 +4,58 @@ import team from "../data/team";
 
 export default function TeamSection() {
   return (
-    <section id="team" className="container section">
-      <h2 className="section-title">Meet Our Team</h2>
+    <section id="team" className="section section--muted">
+      <div className="container">
+        <h2 className="section-title">Meet Our Team</h2>
 
-      <div className="grid">
-        {team.map((m, i) => {
-          const spanClass = m.span ? `span-${m.span}` : "";
-          const cardClass = ["card", "team-card"];
-          if (m.layout) {
-            cardClass.push(`team-card--${m.layout}`);
-          }
+        <div className="grid">
+          {team.map((m, i) => {
+            const spanClass = m.span ? `span-${m.span}` : "";
+            const cardClass = ["card", "team-card"];
+            if (m.layout) {
+              cardClass.push(`team-card--${m.layout}`);
+            }
 
-          const photo = (
-            <img
-              src={m.photo}
-              alt={m.name}
-              className="team-photo"
-              style={m.photoPosition ? { objectPosition: m.photoPosition } : undefined}
-            />
-          );
-          const mediaContent =
-            m.layout === "group" ? (
-              <div className="team-group-content">
-                <div className="team-photo-frame">{photo}</div>
-                <div className="team-group-banner" aria-hidden="true">
-                  <span>BIG</span>
-                  <span>BOSS</span>
-                  <span>MEDIA</span>
-                </div>
-              </div>
-            ) : (
-              photo
+            const photo = (
+              <img
+                src={m.photo}
+                alt={m.name}
+                className="team-photo"
+                style={m.photoPosition ? { objectPosition: m.photoPosition } : undefined}
+              />
             );
-          return (
-            <Reveal
-              key={m.id}
-              delay={i * 0.06}
-              y={18}
-              className={`grid-span ${spanClass}`.trim()}
-            >
-              <article className={cardClass.join(" ")}>
-                {mediaContent}
-                <div className="team-body">
-                  <span className="team-role">{m.role}</span>
-                  <h3>{m.name}</h3>
-                  {m.bio ? <p>{m.bio}</p> : null}
+            const mediaContent =
+              m.layout === "group" ? (
+                <div className="team-group-content">
+                  <div className="team-photo-frame">{photo}</div>
+                  <div className="team-group-banner" aria-hidden="true">
+                    <span>BIG</span>
+                    <span>BOSS</span>
+                    <span>MEDIA</span>
+                  </div>
                 </div>
-              </article>
-            </Reveal>
-          );
-        })}
+              ) : (
+                photo
+              );
+            return (
+              <Reveal
+                key={m.id}
+                delay={i * 0.06}
+                y={18}
+                className={`grid-span ${spanClass}`.trim()}
+              >
+                <article className={cardClass.join(" ")}>
+                  {mediaContent}
+                  <div className="team-body">
+                    <span className="team-role">{m.role}</span>
+                    <h3>{m.name}</h3>
+                    {m.bio ? <p>{m.bio}</p> : null}
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
