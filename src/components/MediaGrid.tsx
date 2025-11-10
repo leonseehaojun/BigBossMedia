@@ -11,9 +11,9 @@ export default function MediaGrid({ items, id }: { items: MediaItem[]; id?: stri
     <>
       <div id={id} className="grid">
         {items.map((item, i) => (
-            <Reveal key={item.id} delay={i * 0.06} y={18} className="grid-span">
+          <Reveal key={item.id} delay={i * 0.06} y={18} className="grid-span">
             <MediaCard item={item} onOpen={() => setActive(item)} />
-            </Reveal>
+          </Reveal>
         ))}
       </div>
 
